@@ -1,0 +1,5 @@
+{
+  "name": "3D Car Simulator",
+  "description": "A 3D car simulator built with Angular and Three.js. Drive a car across a dynamic, procedurally generated terrain using your keyboard's arrow keys.",
+  "requestFramePermissions": []
+}

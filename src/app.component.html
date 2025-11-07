@@ -1,0 +1,58 @@
+<div class="relative w-screen h-screen overflow-hidden font-mono text-white">
+  <canvas #rendererCanvas class="w-full h-full block"></canvas>
+
+  <!-- HUD - Top Right -->
+  <div class="absolute top-8 right-8 text-right select-none">
+    <div class="mb-6">
+      <p class="text-4xl font-light tracking-wider">{{ threeService.distanceKm.toFixed(1) }}</p>
+      <p class="text-xs font-bold tracking-[.2em] text-gray-300">KILOMETERS</p>
+    </div>
+    <div>
+      <p class="text-4xl font-light tracking-wider">{{ threeService.speedKph.toFixed(1) }}</p>
+      <p class="text-xs font-bold tracking-[.2em] text-gray-300">KILOMETERS PER HOUR</p>
+    </div>
+  </div>
+
+  <!-- Keyboard Instructions (Desktop only) -->
+  <div class="hidden md:block absolute top-4 left-4 bg-black bg-opacity-40 text-white p-4 rounded-lg shadow-lg">
+    <h1 class="text-lg font-bold mb-2 text-gray-200">Controls</h1>
+    <ul class="list-disc list-inside text-sm text-gray-300">
+      <li><span class="font-bold text-white">↑</span> : Accelerate</li>
+      <li><span class="font-bold text-white">↓</span> : Brake/Reverse</li>
+      <li><span class="font-bold text-white">←/→</span> : Steer</li>
+      <li><span class="font-bold text-white">Shift</span> : Boost</li>
+    </ul>
+  </div>
+
+  <!-- Mobile Controls (Mobile only) -->
+  <div class="md:hidden absolute bottom-8 left-8 right-8 flex justify-between items-end">
+    <!-- Steering: Left/Right -->
+    <div class="flex gap-4">
+      <button (touchstart)="threeService.setKeyPressed('ArrowLeft', true)" (touchend)="threeService.setKeyPressed('ArrowLeft', false)"
+        class="w-20 h-20 rounded-full border-2 border-white/50 bg-black/30 flex items-center justify-center text-4xl active:bg-white/30">
+        <span>&#x2190;</span>
+      </button>
+      <button (touchstart)="threeService.setKeyPressed('ArrowRight', true)" (touchend)="threeService.setKeyPressed('ArrowRight', false)"
+        class="w-20 h-20 rounded-full border-2 border-white/50 bg-black/30 flex items-center justify-center text-4xl active:bg-white/30">
+        <span>&#x2192;</span>
+      </button>
+    </div>
+
+    <!-- Actions: Accel/Brake/Boost -->
+    <div class="flex flex-col gap-4 text-center">
+       <button (touchstart)="threeService.setKeyPressed('Shift', true)" (touchend)="threeService.setKeyPressed('Shift', false)"
+        class="w-20 h-20 rounded-full border-2 border-white/50 bg-black/30 flex items-center justify-center text-lg font-bold active:bg-white/30">
+        BOOST
+      </button>
+      <button (touchstart)="threeService.setKeyPressed('ArrowUp', true)" (touchend)="threeService.setKeyPressed('ArrowUp', false)"
+        class="w-24 h-24 rounded-full border-2 border-white/50 bg-black/30 flex items-center justify-center text-4xl active:bg-white/30">
+        <span>&#x2191;</span>
+      </button>
+       <button (touchstart)="threeService.setKeyPressed('ArrowDown', true)" (touchend)="threeService.setKeyPressed('ArrowDown', false)"
+        class="w-20 h-20 rounded-full border-2 border-white/50 bg-black/30 flex items-center justify-center text-lg font-bold active:bg-white/30">
+        BRAKE
+      </button>
+    </div>
+  </div>
+
+</div>
