@@ -132,33 +132,81 @@ export class ThreeService {
 
   private createCar(): void {
     this.car = new THREE.Group();
-    this.car.position.y = 0.5;
+    this.car.position.y = 0.4; // Adjusted for wheels to sit on the ground plane
+
+    // Materials
+    const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0xcc0000, metalness: 0.4, roughness: 0.5 });
+    const cabinMaterial = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.5, roughness: 0.2 });
+    const chassisMaterial = new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.2, roughness: 0.8 });
+    const wheelMaterial = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 });
+    const taillightMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: 0x880000 });
+    const headlightMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00, emissive: 0xeeee00, emissiveIntensity: 2 });
+    
+    // Chassis
+    const chassisGeometry = new THREE.BoxGeometry(2.0, 0.4, 4.6);
+    const chassis = new THREE.Mesh(chassisGeometry, chassisMaterial);
+    chassis.position.y = 0.2;
+    chassis.castShadow = true;
+    this.car.add(chassis);
 
     // Car Body
-    const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.2, roughness: 0.5 });
     const bodyGeometry = new THREE.BoxGeometry(2, 0.8, 4.5);
     const carBody = new THREE.Mesh(bodyGeometry, bodyMaterial);
+    carBody.position.y = 0.7;
     carBody.castShadow = true;
     this.car.add(carBody);
 
     // Car Cabin
-    const cabinMaterial = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.5, roughness: 0.2 });
     const cabinGeometry = new THREE.BoxGeometry(1.6, 0.7, 2.5);
     const carCabin = new THREE.Mesh(cabinGeometry, cabinMaterial);
-    carCabin.position.y = 0.75;
+    carCabin.position.y = 1.45;
     carCabin.position.z = -0.3;
     carCabin.castShadow = true;
     this.car.add(carCabin);
     
+    // Wheels
+    const wheelGeometry = new THREE.CylinderGeometry(0.35, 0.35, 0.25, 32);
+    wheelGeometry.rotateZ(Math.PI / 2);
+
+    const wheels: THREE.Mesh[] = [];
+    for (let i = 0; i < 4; i++) {
+        const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+        wheel.castShadow = true;
+        wheels.push(wheel);
+        this.car.add(wheel);
+    }
+    wheels[0].position.set(-1, 0.35, 1.4); // Front left
+    wheels[1].position.set(1, 0.35, 1.4);  // Front right
+    wheels[2].position.set(-1, 0.35, -1.4); // Rear left
+    wheels[3].position.set(1, 0.35, -1.4);   // Rear right
+
     // Taillights
-    const taillightMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: 0x550000 });
     const taillightGeometry = new THREE.BoxGeometry(0.7, 0.3, 0.1);
     const leftLight = new THREE.Mesh(taillightGeometry, taillightMaterial);
-    leftLight.position.set(-0.6, 0.2, -2.26);
+    leftLight.position.set(-0.6, 0.7, -2.26);
     this.car.add(leftLight);
     const rightLight = leftLight.clone();
     rightLight.position.x = 0.6;
     this.car.add(rightLight);
+
+    // Headlights
+    const headlightGeometry = new THREE.CylinderGeometry(0.2, 0.18, 0.1, 16);
+    headlightGeometry.rotateX(Math.PI / 2);
+    const leftHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
+    leftHeadlight.position.set(-0.7, 0.8, 2.26);
+    this.car.add(leftHeadlight);
+    const rightHeadlight = leftHeadlight.clone();
+    rightHeadlight.position.x = 0.7;
+    this.car.add(rightHeadlight);
+    
+    // Side Mirrors
+    const mirrorGeometry = new THREE.BoxGeometry(0.15, 0.25, 0.3);
+    const leftMirror = new THREE.Mesh(mirrorGeometry, chassisMaterial);
+    leftMirror.position.set(-1.07, 1.2, 0.4);
+    this.car.add(leftMirror);
+    const rightMirror = leftMirror.clone();
+    rightMirror.position.x = 1.07;
+    this.car.add(rightMirror);
 
     this.scene.add(this.car);
   }
